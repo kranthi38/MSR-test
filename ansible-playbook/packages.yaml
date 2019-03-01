@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  become: yes
+  gather_facts: false
+  tasks:
+  - name: installing packages
+    apt:
+      name: "{{item}}"
+      state: installed
+    with_items:
+     - openssl
+     - git
+  - name: download docker
+    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - name: update the ubuntu
+    shell: sudo apt-get update ; apt-cache policy docker-ce
+  - name: install docker-ce
+    shell : sudo apt-get install -y docker-ce
+  - name: start the service
+    service: name=docker state=started
+  - name: installing cocker-compose
+    shell: sudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+  - name: set the permissions
+    shell: sudo chmod +x /usr/local/bin/docker-compose
+  - name: To install LTS release,
+    shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+  - name: Install nvm
+    shell: /bin/bash -c "wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh"
+  - name: Install node and set version
+    shell: /bin/bash -c "source ~/.nvm/nvm.sh && nvm install 0.10 && nvm alias default 0.10"
+

@@ -1,0 +1,7 @@
+couchdb:
+  build: .
+  volumes:
+    - ./etc:/usr/local/etc/couchdb/local.d
+    - ./lib:/usr/local/var/lib/couchdb
+  ports:
+    - "5984:5984"
